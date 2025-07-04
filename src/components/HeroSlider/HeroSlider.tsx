@@ -7,12 +7,14 @@ import "swiper/css/thumbs";
 import "../../style/swiper-custom.css";
 import type { IMovie } from "@/types";
 import { IMAGE_URL } from "@/const";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   data: IMovie[];
 }
 
 const HeroSlider: FC<Props> = ({ data }) => {
+  const navigate = useNavigate();
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -48,7 +50,10 @@ const HeroSlider: FC<Props> = ({ data }) => {
                   {movie.original_language?.toUpperCase()} • ⭐{" "}
                   {movie.vote_average?.toFixed(1)}
                 </p>
-                <button className="bg-white text-black px-5 py-2 rounded-full text-sm font-medium hover:bg-red-600 hover:text-white transition-colors">
+                <button
+                  onClick={() => navigate("/movies")}
+                  className="bg-white text-black px-5 py-2 rounded-full text-sm font-medium hover:bg-red-600 hover:text-white transition-colors"
+                >
                   Watch Now
                 </button>
               </div>

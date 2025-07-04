@@ -14,9 +14,7 @@ const MovieItem: React.FC<Props> = ({ movie }) => {
     <div className="group w-full cursor-pointer relative">
       <div className="relative rounded-t-lg overflow-hidden">
         <img
-          onClick={() => navigate(`/movies/${movie.id}`)
-         
-        }
+          onClick={() => navigate(`/movies/${movie.id}`)}
           src={IMAGE_URL + movie.poster_path}
           alt={movie.title}
           className="w-full h-full object-cover aspect-[2/3] rounded-t-lg transition-transform duration-300 group-hover:scale-[1.03]" // faqat rasmga hover ta’sir qiladi
@@ -31,7 +29,7 @@ const MovieItem: React.FC<Props> = ({ movie }) => {
       </div>
       <div className="bg-gradient-to-b from-black to-zinc-800 p-4 text-white rounded-b-lg">
         <h3
-          onClick={() => navigate(`/movies/${movie.id}`)}
+          onClick={() => navigate(`/movies/${movie.id}   `)}
           className="text-base font-semibold line-clamp-1 hover:text-blue-600"
         >
           {movie.title}
