@@ -1,49 +1,53 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Pagination } from "antd";
-import { useSearchParams } from "react-router-dom";
+
+import { useParamsHook } from "@/hooks/useParamsHook";
 import { useMovie } from "@/api/hook/useMovies";
+import { useGenre } from "@/api/hook/useGenre";
 import MovieView from "@/components/movies/MovieView";
+import Genre from "@/components/Genre/Genre";
 
 const Movies = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { getMovies } = useMovie();
-  const [params, setParams] = useSearchParams();
+  const { getGenre } = useGenre();
+  const { getParam, setParam } = useParamsHook();
 
-  const page = parseInt(params.get("page") || "1", 10);
-  const pageSize = parseInt(params.get("pageSize") || "20", 10);
+  const genre = getParam("genre");
 
-  const { data } = getMovies({
-    skip: (page - 1) * pageSize,
-    limit: pageSize,
-  });
+  const page = Number(getParam("page")) || 1;
 
-  const handleChangePage = (newPage: number, newPageSize?: number) => {
-    const updated = new URLSearchParams(params);
-
-    updated.set("page", String(newPage));
-
-    if (newPageSize !== undefined) {
-      updated.set("pageSize", String(newPageSize));
-    }
-
-    setParams(updated);
-    window.scrollTo({ top: 0 });
+  const handlePagination = (value: number) => {
+    window.scrollTo(0, 0);
+    setParam("page", value.toString());
   };
 
-  return (
-    <div className=" min-h-screen py-8">
-      <div className="container mx-auto px-4">
-        <MovieView data={data?.results} />
+  const { data: genreData } = getGenre();
+  const { data } = getMovies({
+    page,
+    with_genres: genre,
+    without_genres: "18,36,27,10749",
+  } as any);
 
-        <div className="mt-10 flex justify-center">
-          <Pagination
-            current={page}
-            total={data?.total || 500}
-            pageSize={pageSize}
-            onChange={handleChangePage}
-            showSizeChanger={false}
-            className="text-white"
-          />
-        </div>
+  return (
+    <div>
+      <Genre data={genreData?.genres} />
+      <MovieView data={data?.results} />
+      <div className="flex items-center justify-center mt-12">
+        <Pagination
+          className="custom-pagination !gap-1 sm:!gap-0"
+          current={page}
+          onChange={handlePagination}
+          pageSize={20}
+          showSizeChanger={false}
+          total={
+            data?.total_results && data.total_results <= 10_000
+              ? data.total_results
+              : 10_000
+          }
+        />
       </div>
     </div>
   );

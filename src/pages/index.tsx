@@ -3,6 +3,7 @@ import { useRoutes } from "react-router-dom";
 const Layout = lazy(() => import("./layout/Layout"));
 const Home = lazy(() => import("./Home/Home"));
 const Movies = lazy(() => import("./Movies/Movies"));
+const MovieDetail = lazy(() => import("./Movies/MovieDetail"));
 const NotFound = lazy(() => import("./NotFound/NotFound"));
 
 const MainRoute = () => {
@@ -18,6 +19,10 @@ const MainRoute = () => {
         {
           path: "/movies",
           element: <Movies />,
+        },
+        {
+          path: "/movies/:id",
+          element: <MovieDetail />,
         },
         {
           path: "*",

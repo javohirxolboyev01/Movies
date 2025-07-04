@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Logo from "@/assets/Logo/Logo.png";
 import {
@@ -6,7 +6,11 @@ import {
   HomeOutlined,
   SearchOutlined,
   VideoCameraOutlined,
+  MenuOutlined,
+  MoonOutlined,
+  BulbOutlined,
 } from "@ant-design/icons";
+import { Drawer } from "antd";
 
 const navItems = [
   { to: "/", icon: <HomeOutlined className="text-xl" />, label: "Home" },
@@ -25,14 +29,35 @@ const navItems = [
 
 const Header = () => {
   const navigate = useNavigate();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("theme") === "dark";
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const html = document.documentElement;
+    if (isDark) {
+      html.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      html.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark((prev) => !prev);
+
   return (
-    <header className="w-full bg-black text-white">
+    <header className="w-full sticky top-0 z-50 bg-gray-950/90 text-white dark:bg-black/80  dark:text-white backdrop-blur shadow-md transition-all duration-300">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center flex-1">
+        <div className="flex items-center">
           <img
             src={Logo}
             alt="Logo"
-            className="h-10 w-auto object-contain"
+            className="h-10 w-auto object-contain cursor-pointer"
             onClick={() => navigate("/")}
           />
         </div>
@@ -54,34 +79,88 @@ const Header = () => {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center justify-end flex-1 gap-3">
-          <select className="bg-transparent text-white text-sm border border-white rounded px-2 py-1">
-            <option value="ru">Ru</option>
-            <option value="uz">UZ</option>
-          </select>
+        <div className="hidden md:flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            className="text-white border border-white bg-white/10 px-2 py-2 rounded text-sm hover:bg-white hover:text-black transition flex items-center gap-2"
+          >
+            {isDark ? (
+              <>
+                <BulbOutlined />
+              </>
+            ) : (
+              <>
+                <MoonOutlined />
+              </>
+            )}
+          </button>
 
-          <button className="bg-red-600 hover:bg-red-700 transition text-white px-4 py-2 rounded text-sm">
-            Войти
+          <button
+            onClick={() => navigate("/sign")}
+            className="bg-red-600 hover:bg-red-700 transition text-white px-4 py-2 rounded text-sm"
+          >
+            Sign In
+          </button>
+        </div>
+
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="flex flex-col items-center gap-1 hover:text-red-500 transition"
+          >
+            <MenuOutlined className="text-xl" />
           </button>
         </div>
       </div>
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-black border-t border-neutral-700 flex justify-around py-2 z-50">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            className={({ isActive }) =>
-              `flex flex-col items-center text-xs transition ${
-                isActive ? "text-red-500" : "text-white hover:text-red-500"
-              }`
-            }
+      <Drawer
+        placement="right"
+        onClose={() => setDrawerOpen(false)}
+        open={drawerOpen}
+        className="md:hidden"
+        closable={false}
+        width={220}
+        style={{
+          padding: "1.5rem",
+          backgroundColor: "#0f0f0f",
+          color: "#ffffff",
+        }}
+      >
+        <div className="flex flex-col gap-4 text-white">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              onClick={() => setDrawerOpen(false)}
+              className={({ isActive }) =>
+                `flex flex-row items-center gap-3 text-base transition ${
+                  isActive ? "text-red-500" : "hover:text-red-500"
+                }`
+              }
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
+
+          <button
+            onClick={toggleTheme}
+            className="mt-4 border border-white px-2 py-1 rounded text-white text-sm flex items-center gap-2"
           >
-            {item.icon}
-            <span>{item.label}</span>
-          </NavLink>
-        ))}
-      </nav>
+            {isDark ? (
+              <>
+                <BulbOutlined />
+                Light
+              </>
+            ) : (
+              <>
+                <MoonOutlined />
+                Dark
+              </>
+            )}
+          </button>
+        </div>
+      </Drawer>
     </header>
   );
 };
