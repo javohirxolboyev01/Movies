@@ -9,6 +9,7 @@ import {
   MenuOutlined,
   MoonOutlined,
   BulbOutlined,
+  SunOutlined,
 } from "@ant-design/icons";
 import { Drawer } from "antd";
 
@@ -86,11 +87,11 @@ const Header = () => {
           >
             {isDark ? (
               <>
-                <BulbOutlined />
+                <SunOutlined/>
               </>
             ) : (
               <>
-                <MoonOutlined />
+                <MoonOutlined/>
               </>
             )}
           </button>
