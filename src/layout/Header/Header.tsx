@@ -80,25 +80,25 @@ const Header = () => {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-4">
           <button
             onClick={toggleTheme}
-            className="text-white border border-white bg-white/10 px-2 py-2 rounded text-sm hover:bg-white hover:text-black transition flex items-center gap-2"
+            className="text-white border border-white bg-white/10 px-2 py-2 rounded-full cursor-pointer text-lg hover:bg-white hover:text-black transition flex items-center gap-2 "
           >
             {isDark ? (
               <>
-                <SunOutlined/>
+                <SunOutlined />
               </>
             ) : (
               <>
-                <MoonOutlined/>
+                <MoonOutlined />
               </>
             )}
           </button>
 
           <button
             onClick={() => navigate("/sign")}
-            className="bg-red-600 hover:bg-red-700 transition text-white px-4 py-2 rounded text-sm"
+            className="bg-red-600 hover:bg-red-700 transition text-white px-10 py-3 rounded text-sm ml-3"
           >
             Sign In
           </button>

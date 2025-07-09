@@ -51,7 +51,7 @@ const HeroSlider: FC<Props> = ({ data }) => {
                   {movie.vote_average?.toFixed(1)}
                 </p>
                 <button
-                  onClick={() => navigate("/movies")}
+                  onClick={() => navigate(`/movies/${movie.id}`)}
                   className="bg-white text-black px-5 py-2 rounded-full text-sm font-medium hover:bg-red-600 hover:text-white transition-colors"
                 >
                   Watch Now
