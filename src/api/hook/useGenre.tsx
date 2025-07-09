@@ -5,8 +5,7 @@ export const useGenre = () => {
   const getGenre = () =>
     useQuery({
       queryKey: ["gener"],
-      queryFn: () =>
-        api.get("genre/movie/list").then((res) => res.data),
+      queryFn: () => api.get("genre/movie/list").then((res) => res.data),
     });
 
   return { getGenre };

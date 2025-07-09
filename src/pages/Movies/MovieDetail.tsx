@@ -40,18 +40,17 @@ const MovieDetail = () => {
 
       {imagesData?.backdrops?.length > 0 && (
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <h2 className="text-xl font-semibold mb-4 text-black dark:text-white">
+          <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-black dark:text-white">
             Gallery
           </h2>
+
           <div className="flex overflow-x-auto gap-4 scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-700">
             {imagesData.backdrops.slice(0, 15).map((item: any, inx: number) => (
               <Image
                 key={inx}
-                width={200}
-                height={120}
                 src={IMAGE_URL + item.file_path}
                 preview={false}
-                className="rounded-lg object-cover"
+                className="rounded-lg object-cover flex-shrink-0 w-[160px] h-[90px] sm:w-[200px] sm:h-[120px] md:w-[240px] md:h-[140px] lg:w-[280px] lg:h-[160px]"
               />
             ))}
           </div>

@@ -5,6 +5,7 @@ const Home = lazy(() => import("./Home/Home"));
 const Movies = lazy(() => import("./Movies/Movies"));
 const MovieDetail = lazy(() => import("./Movies/MovieDetail"));
 const ActorDetail = lazy(() => import("./Movies/ActorDetail"));
+const WishlistPage = lazy(() => import("./WishlistPage/WishlistPage"));
 const NotFound = lazy(() => import("./NotFound/NotFound"));
 
 const MainRoute = () => {
@@ -28,6 +29,10 @@ const MainRoute = () => {
         {
           path: "/actor/:id",
           element: <ActorDetail />,
+        },
+        {
+          path: "/wishlist",
+          element: <WishlistPage />,
         },
         {
           path: "*",

@@ -6,12 +6,9 @@ import {
   HomeOutlined,
   SearchOutlined,
   VideoCameraOutlined,
-  MenuOutlined,
   MoonOutlined,
-  BulbOutlined,
   SunOutlined,
 } from "@ant-design/icons";
-import { Drawer } from "antd";
 
 const navItems = [
   { to: "/", icon: <HomeOutlined className="text-xl" />, label: "Home" },
@@ -20,7 +17,11 @@ const navItems = [
     icon: <VideoCameraOutlined className="text-xl" />,
     label: "Movies",
   },
-  { to: "/saved", icon: <HeartOutlined className="text-xl" />, label: "Saved" },
+  {
+    to: "/wishlist",
+    icon: <HeartOutlined className="text-xl" />,
+    label: "Saved",
+  },
   {
     to: "/search",
     icon: <SearchOutlined className="text-xl" />,
@@ -30,7 +31,6 @@ const navItems = [
 
 const Header = () => {
   const navigate = useNavigate();
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("theme") === "dark";
@@ -52,9 +52,9 @@ const Header = () => {
   const toggleTheme = () => setIsDark((prev) => !prev);
 
   return (
-    <header className="w-full sticky top-0 z-50 bg-gray-950/90 text-white dark:bg-black/80  dark:text-white backdrop-blur shadow-md transition-all duration-300">
+    <header className="fixed bottom-0 md:top-0 md:relative z-50 w-full bg-white text-black dark:bg-black dark:text-white backdrop-blur shadow-md transition-all duration-300">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center">
+        <div className="hidden md:flex items-center">
           <img
             src={Logo}
             alt="Logo"
@@ -83,17 +83,14 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-4">
           <button
             onClick={toggleTheme}
-            className="text-white border border-white bg-white/10 px-2 py-2 rounded-full cursor-pointer text-lg hover:bg-white hover:text-black transition flex items-center gap-2 "
+            className={`border px-2 py-2 rounded-full text-lg transition flex items-center gap-2
+              ${
+                isDark
+                  ? "bg-white/10 border-white text-white"
+                  : "bg-gray-100 border-gray-300 text-black hover:bg-gray-200"
+              }`}
           >
-            {isDark ? (
-              <>
-                <SunOutlined />
-              </>
-            ) : (
-              <>
-                <MoonOutlined />
-              </>
-            )}
+            {isDark ? <SunOutlined /> : <MoonOutlined />}
           </button>
 
           <button
@@ -103,65 +100,36 @@ const Header = () => {
             Sign In
           </button>
         </div>
-
-        <div className="md:hidden flex items-center">
-          <button
-            onClick={() => setDrawerOpen(true)}
-            className="flex flex-col items-center gap-1 hover:text-red-500 transition"
-          >
-            <MenuOutlined className="text-xl" />
-          </button>
-        </div>
       </div>
 
-      <Drawer
-        placement="right"
-        onClose={() => setDrawerOpen(false)}
-        open={drawerOpen}
-        className="md:hidden"
-        closable={false}
-        width={220}
-        style={{
-          padding: "1.5rem",
-          backgroundColor: "#0f0f0f",
-          color: "#ffffff",
-        }}
-      >
-        <div className="flex flex-col gap-4 text-white">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={() => setDrawerOpen(false)}
-              className={({ isActive }) =>
-                `flex flex-row items-center gap-3 text-base transition ${
-                  isActive ? "text-red-500" : "hover:text-red-500"
-                }`
-              }
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
-
-          <button
-            onClick={toggleTheme}
-            className="mt-4 border border-white px-2 py-1 rounded text-white text-sm flex items-center gap-2"
+      <div className="md:hidden bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 px-4 py-2 flex justify-between items-center fixed bottom-0 left-0 right-0 z-50">
+        {navItems.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            className={({ isActive }) =>
+              `flex flex-col items-center text-xs ${
+                isActive ? "text-red-500" : "text-gray-500 hover:text-red-500"
+              }`
+            }
           >
-            {isDark ? (
-              <>
-                <BulbOutlined />
-                Light
-              </>
-            ) : (
-              <>
-                <MoonOutlined />
-                Dark
-              </>
-            )}
-          </button>
-        </div>
-      </Drawer>
+            {item.icon}
+            <span>{item.label}</span>
+          </NavLink>
+        ))}
+
+        <button
+          onClick={toggleTheme}
+          className="flex flex-col items-center text-xs text-gray-500 hover:text-red-500"
+        >
+          {isDark ? (
+            <SunOutlined className="text-xl" />
+          ) : (
+            <MoonOutlined className="text-xl" />
+          )}
+          <span>{isDark ? "Light" : "Dark"}</span>
+        </button>
+      </div>
     </header>
   );
 };
