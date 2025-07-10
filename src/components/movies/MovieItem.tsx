@@ -42,7 +42,7 @@ const MovieItem: React.FC<Props> = ({ movie }) => {
           className="absolute top-2 right-2 z-10 px-1.5 py-1 rounded-full bg-white/20 backdrop-blur-sm"
         >
           {wishlists.some((item) => item.id === movie.id) ? (
-            <HeartFilled className="!text-red-600 text-[20px] transition duration-200" />
+            <HeartFilled className="dark:!text-white  !text-black text-[20px] transition duration-200" />
           ) : (
             <HeartOutlined className="text-gray-600 text-[20px] hover:text-red-500 transition duration-200" />
           )}

@@ -37,11 +37,18 @@ export const useMovie = () => {
           .then((res) => res.data),
     });
 
+  const getMovieTrailer = (id: string) =>
+    useQuery({
+      queryKey: ["trailer", id],
+      queryFn: () => api.get(`movie/${id}/videos`).then((res) => res.data),
+    });
+
   return {
     getMovies,
     getMovieSingle,
     getMovieDetail,
     getActorDetail,
     getActorCredits,
+    getMovieTrailer,
   };
 };
