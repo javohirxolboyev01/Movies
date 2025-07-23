@@ -21,3 +21,9 @@ export interface IGenre {
   id: number;
   name: string;
 }
+
+export interface Users {
+  name: string;
+  email: string;
+  picture: string;
+}

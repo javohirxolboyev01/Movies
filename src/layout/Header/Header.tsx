@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { logout } from "@/components/redux/feature/usersSlice";
 import Logo from "@/assets/Logo/Logo.png";
 import { IoSunnyOutline } from "react-icons/io5";
 import { BsBookmark, BsMoon } from "react-icons/bs";
 import { GoHome } from "react-icons/go";
 import { RiMovie2Line } from "react-icons/ri";
 import { IoMdSearch } from "react-icons/io";
-
+import { FiLogOut } from "react-icons/fi";
+import type { RootState } from "@/components/redux";
 
 const navItems = [
   { to: "/", icon: <GoHome className="text-xl" />, label: "Home" },
@@ -20,15 +24,12 @@ const navItems = [
 ];
 
 const Header = () => {
-
-
   const navigate = useNavigate();
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("theme") === "dark";
-    }
-    return false;
-  });
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.user);
+  const [isDark, setIsDark] = useState(
+    () => localStorage.getItem("theme") === "dark"
+  );
 
   useEffect(() => {
     const html = document.documentElement;
@@ -53,6 +54,7 @@ const Header = () => {
             className="h-10 w-auto object-contain cursor-pointer"
             onClick={() => navigate("/")}
           />
+
           <div className="hidden md:flex items-center gap-10">
             {navItems.map((item) => (
               <NavLink
@@ -69,24 +71,45 @@ const Header = () => {
               </NavLink>
             ))}
           </div>
+
           <div className="flex items-center gap-4">
             <button
               onClick={toggleTheme}
               className={`border px-2 py-2 rounded-full text-lg transition flex items-center gap-2
-          ${
-            isDark
-              ? "bg-white/10 border-white text-white"
-              : "bg-gray-100 border-gray-300 text-black hover:bg-gray-200"
-          }`}
+              ${
+                isDark
+                  ? "bg-white/10 border-white text-white"
+                  : "bg-gray-100 border-gray-300 text-black hover:bg-gray-200"
+              }`}
             >
               {isDark ? <IoSunnyOutline /> : <BsMoon />}
             </button>
-            <button
-              onClick={() => navigate("/login")}
-              className="bg-red-600 hover:bg-red-700 transition text-white px-6 py-2 rounded-xl text-sm"
-            >
-              Sign In
-            </button>
+
+            {user ? (
+              <div className="flex items-center gap-2">
+                <img
+                  src={user.picture}
+                  alt="avatar"
+                  className="w-8 h-8 rounded-full object-cover"
+                />
+                <span className="hidden md:inline text-sm font-medium">
+                  {user.name}
+                </span>
+                <button
+                  onClick={() => dispatch(logout())}
+                  className="ml-2 text-sm flex items-center gap-1 underline hover:text-red-500"
+                >
+                  <FiLogOut className="text-base" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate("/login")}
+                className="bg-red-600 hover:bg-red-700 transition text-white px-6 py-2 rounded-xl text-sm"
+              >
+                Sign In
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -117,7 +140,6 @@ const Header = () => {
           )}
           <span>{isDark ? "Light" : "Dark"}</span>
         </button>
-      
       </div>
     </>
   );
