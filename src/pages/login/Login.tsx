@@ -20,7 +20,10 @@ const Login = () => {
       <div className="bg-white dark:bg-gray-900 shadow-2xl rounded-2xl p-8 max-w-sm w-full">
         <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
           Login to{" "}
-          <span onClick={() => nav("/")} className="text-red-500">
+          <span
+            onClick={() => nav("/")}
+            className="text-red-500 cursor-pointer select-none"
+          >
             Movies
           </span>
         </h2>
