@@ -7,6 +7,13 @@
   margin-left: auto;
   margin-right: auto;
 }
+.genre-scroll::-webkit-scrollbar {
+  display: none;
+}
+.genre-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
 .custom-pagination .ant-pagination-item,
 .custom-pagination .ant-pagination-prev,

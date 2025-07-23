@@ -6,6 +6,8 @@ const Movies = lazy(() => import("./Movies/Movies"));
 const MovieDetail = lazy(() => import("./Movies/MovieDetail"));
 const ActorDetail = lazy(() => import("./Movies/ActorDetail"));
 const WishlistPage = lazy(() => import("./WishlistPage/WishlistPage"));
+const Search = lazy(() => import("./Search/Search"));
+const Login = lazy(() => import("./login/Login"));
 const NotFound = lazy(() => import("./NotFound/NotFound"));
 
 const MainRoute = () => {
@@ -33,6 +35,14 @@ const MainRoute = () => {
         {
           path: "/wishlist",
           element: <WishlistPage />,
+        },
+        {
+          path: "/search",
+          element: <Search />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
         },
         {
           path: "*",

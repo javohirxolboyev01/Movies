@@ -9,7 +9,7 @@ import Genre from "@/components/Genre/Genre";
 
 const Movies = () => {
   useEffect(() => {
-    window.scrollTo(0, 0);
+    document.title = "Kinolar | Movies";
   }, []);
   const { getMovies } = useMovie();
   const { getGenre } = useGenre();

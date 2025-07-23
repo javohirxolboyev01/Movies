@@ -3,8 +3,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useMovie } from "@/api/hook/useMovies";
 import { IMAGE_URL } from "@/const";
 import MovieView from "@/components/movies/MovieView";
+import { Image } from "antd";
 
 const MovieDetail = () => {
+  useEffect(() => {
+    document.title = "MovieDetail | Movies";
+    window.scrollTo(0, 0);
+  }, []);
   const { id } = useParams();
   const navigate = useNavigate();
   const { getMovieSingle, getMovieDetail } = useMovie();
@@ -15,144 +20,116 @@ const MovieDetail = () => {
   const { data: creditsData } = getMovieDetail(id || "", "credits");
   const { data: trailerData } = getMovieDetail(id || "", "videos");
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   if (!data) return null;
 
   return (
-    <div className="bg-white text-black dark:bg-[#0d1117] dark:text-white min-h-screen py-10 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="bg-white text-white dark:bg-[#0d1117] dark:text-white min-h-screen">
+      <div className="relative w-full h-[70vh] md:h-[80vh] overflow-hidden">
+        <img
+          src={IMAGE_URL + data.backdrop_path}
+          alt="Backdrop"
+          className="w-full h-full object-cover brightness-[.35]"
+        />
+        <div className="absolute inset-0 flex items-end md:items-center justify-center md:justify-start px-6 md:px-16 pb-10 md:pb-0">
+          <div className="text-center md:text-left text-white max-w-2xl space-y-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight drop-shadow-lg">
+              {data.title}
+            </h1>
+            {data.tagline && (
+              <p className="text-base md:text-lg italic text-gray-300 drop-shadow">
+                {data.tagline}
+              </p>
+            )}
+            <div className="flex gap-4 text-sm md:text-base text-gray-300 justify-center md:justify-start">
+              <span>{data.release_date}</span>
+              <span>{data.runtime} min</span>
+              <span>IMDb {data.vote_average.toFixed(1)} / 10</span>
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+              {data.genres?.map((genr: any) => (
+                <span
+                  key={genr.id}
+                  className="bg-white/10 px-3 py-1 rounded-full text-sm"
+                >
+                  {genr.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-10 space-y-12">
+        <div className="bg-gray-100 dark:bg-[#161b22] p-6 rounded-lg shadow-md text-sm leading-relaxed text-black dark:text-white/90">
+          <h2 className="text-xl font-semibold mb-4">Overview</h2>
+          <p>{data.overview}</p>
+        </div>
+
         {creditsData?.cast?.length > 0 && (
-          <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-700">
-            {creditsData.cast.slice(0, 15).map((person: any) => (
-              <div
-                key={person.id}
-                className="flex flex-col items-center text-center flex-shrink-0 cursor-pointer"
-                onClick={() => {
-                  navigate(`/actor/${person.id}`);
-                  window.scrollTo({ top: 0 });
-                }}
-              >
-                <div className="w-[70px] h-[70px] md:w-[90px] md:h-[90px] rounded-full overflow-hidden bg-gray-300 dark:bg-gray-700 border-2 border-white">
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Cast</h2>
+            <div className="flex gap-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-700">
+              {creditsData.cast.slice(0, 15).map((person: any) => (
+                <div
+                  key={person.id}
+                  className="w-[90px] flex-shrink-0 text-center cursor-pointer"
+                  onClick={() => navigate(`/actor/${person.id}`)}
+                >
                   <img
                     src={
                       person.profile_path
                         ? IMAGE_URL + person.profile_path
-                        : "/no-image.jpg"
+                        : "https://avatars.mds.yandex.net/i?id=c56c58f8712aa808e80dae75d175c8c79b8d920b-16315638-images-thumbs&n=13"
                     }
+                    className="w-20 h-20 mx-auto object-cover rounded-full border-2 border-white"
                     alt={person.original_name}
-                    className="w-full h-full object-cover"
                   />
+                  <p className="text-xs mt-2">{person.original_name}</p>
                 </div>
-                <p className="text-xs md:text-sm mt-2 font-medium truncate w-[80px]">
-                  {person.original_name}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-3 space-y-6">
-            <div className="flex flex-col md:flex-row gap-6 bg-gray-100 dark:bg-[#161b22] p-6 rounded-lg shadow-md">
-              <img
-                src={IMAGE_URL + data.poster_path}
-                alt={data.title}
-                className="w-[200px] h-[300px] object-cover rounded-md shadow-md"
+        {trailerData?.results?.length > 0 && (
+          <div className="bg-gray-100 dark:bg-[#161b22] p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Official Trailer</h2>
+            <div className="aspect-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${trailerData.results[0].key}`}
+                className="w-full h-full rounded-lg"
+                allowFullScreen
               />
-              <div className="flex-1 text-sm space-y-2">
-                <h1 className="text-2xl font-bold mb-4">
-                  {data.title?.toUpperCase()}
-                </h1>
-                <div className="grid grid-cols-2 gap-y-2">
-                  <div className="text-gray-500 dark:text-gray-400">Til:</div>
-                  <div>Inglizcha</div>
-                  <div className="text-gray-500 dark:text-gray-400">
-                    Chiqqan sana:
-                  </div>
-                  <div>{data.release_date}</div>
-                  <div className="text-gray-500 dark:text-gray-400">Janr:</div>
-                  <div>{data.genres?.map((g: any) => g.name).join(", ")}</div>
-                  <div className="text-gray-500 dark:text-gray-400">
-                    Davomiyligi:
-                  </div>
-                  <div>{data.runtime} daqiqa</div>
-                  <div className="text-gray-500 dark:text-gray-400">
-                    Mamlakat:
-                  </div>
-                  <div>{data.production_countries?.[0]?.name}</div>
-                  <div className="text-gray-500 dark:text-gray-400">IMDb:</div>
-                  <div>{data.vote_average} / 10</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-100 dark:bg-[#161b22] p-6 rounded-lg shadow-md leading-relaxed text-black dark:text-white/90 text-sm">
-              <p>{data.overview}</p>
-            </div>
-
-            {trailerData?.results?.length > 0 && (
-              <div className="bg-gray-100 dark:bg-[#161b22] text-black dark:text-white p-6 rounded-lg shadow-md">
-                <h2 className="text-lg font-semibold mb-4">Official Trailer</h2>
-                <iframe
-                  src={`https://www.youtube.com/embed/${trailerData.results[0].key}`}
-                  className="w-full h-[320px] rounded-lg"
-                  allowFullScreen
-                />
-              </div>
-            )}
-
-            {imagesData?.backdrops?.length > 0 && (
-              <div className="bg-gray-100 dark:bg-[#161b22] p-6 rounded-lg shadow-md">
-                <h2 className="text-lg font-semibold mb-4">Gallery</h2>
-                <div className="flex gap-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-700">
-                  {imagesData.backdrops
-                    .slice(0, 8)
-                    .map((img: any, i: number) => (
-                      <div
-                        key={i}
-                        className="w-[240px] h-[140px] flex-shrink-0 rounded-lg overflow-hidden"
-                      >
-                        <img
-                          src={IMAGE_URL + img.file_path}
-                          alt={`gallery-${i}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    ))}
-                </div>
-              </div>
-            )}
-
-            <div className="bg-gray-100 dark:bg-[#161b22] p-6 rounded-lg shadow-md">
-              <h2 className="text-lg font-semibold mb-4">O'xshash filmlar</h2>
-              <MovieView data={similarData?.results?.slice(0, 8)} />
             </div>
           </div>
+        )}
 
-          <div className="space-y-6">
-            <div className="bg-gray-100 dark:bg-[#161b22] p-4 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold mb-2">Tasodifiy filmlar</h3>
-              <div className="space-y-4">
-                <div className="flex gap-3 items-center">
-                  <img
-                    src={IMAGE_URL + data.poster_path}
-                    className="w-14 h-20 object-cover rounded"
-                    alt=""
+        {imagesData?.backdrops?.length > 0 && (
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Gallery</h2>
+            <div className="flex gap-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-700">
+              {imagesData.backdrops.slice(0, 8).map((img: any, i: number) => (
+                <div
+                  key={i}
+                  className="w-[260px] h-[150px] flex-shrink-0 overflow-hidden rounded-lg"
+                >
+                  <Image
+                    src={IMAGE_URL + img.file_path}
+                    alt={`gallery-${i}`}
+                    className="w-full h-full object-cover"
                   />
-                  <div className="text-sm">
-                    <p className="font-medium">{data.title}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      Premyera
-                    </p>
-                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
-        </div>
+        )}
+
+        {similarData?.results?.length > 0 && (
+          <div className="bg-gray-100 dark:bg-[#161b22] p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">O'xshash filmlar</h2>
+            <MovieView data={similarData.results.slice(0, 10)} />
+          </div>
+        )}
       </div>
     </div>
   );

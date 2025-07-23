@@ -1,10 +1,8 @@
 import React, { useState, type FC } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Thumbs, Navigation, Autoplay } from "swiper/modules";
+import { Thumbs, Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import "../../style/swiper-custom.css";
 import type { IMovie } from "@/types";
 import { IMAGE_URL } from "@/const";
 import { useNavigate } from "react-router-dom";
@@ -19,11 +17,10 @@ const HeroSlider: FC<Props> = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div className="pb-8">
+    <div className="mt-5 pb-8">
       <div className="px-4 max-w-[1360px] mx-auto">
         <Swiper
-          modules={[Navigation, Thumbs, Autoplay]}
-          navigation
+          modules={[Thumbs, Autoplay]}
           loop
           autoplay={{
             delay: 4000,
@@ -31,7 +28,7 @@ const HeroSlider: FC<Props> = ({ data }) => {
           }}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           thumbs={{ swiper: thumbsSwiper }}
-          className="w-full h-[600px] rounded-b-2xl overflow-hidden"
+          className="w-full h-[600px] rounded-2xl overflow-hidden"
         >
           {data?.map((movie: IMovie) => (
             <SwiperSlide key={movie.id} className="relative">
@@ -63,17 +60,15 @@ const HeroSlider: FC<Props> = ({ data }) => {
 
         <div className="mt-[3px] flex justify-center">
           <Swiper
-            modules={[Navigation, Thumbs]}
+            modules={[Thumbs]}
             onSwiper={setThumbsSwiper}
-            slidesPerView={6}
-            spaceBetween={3}
+            slidesPerView={4}
+            spaceBetween={4}
             watchSlidesProgress
             loop
-            className="w-full max-w-[750px] h-[70px]"
+            className="w-full max-w-[420px] h-[60px] rounded-xl"
             breakpoints={{
-              320: { slidesPerView: 3 },
               640: { slidesPerView: 4 },
-              1024: { slidesPerView: 6 },
             }}
           >
             {data?.map((movie, index) => (

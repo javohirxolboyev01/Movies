@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from ".."; // sizda axios instance shu yerda
+import { api } from "..";
 
 export const useMovie = () => {
   const getMovies = (params: any) =>
@@ -7,6 +7,13 @@ export const useMovie = () => {
       queryKey: ["movie", params],
       queryFn: () =>
         api.get("discover/movie", { params }).then((res) => res.data),
+    });
+  const getBySearchs = (params: any) =>
+    useQuery({
+      queryKey: ["search", params],
+      queryFn: () =>
+        api.get("search/movie", { params }).then((res) => res.data),
+      enabled: !!params.query,
     });
 
   const getMovieSingle = (id: string) =>
@@ -39,7 +46,7 @@ export const useMovie = () => {
 
   const getMovieTrailer = (id: string) =>
     useQuery({
-      queryKey: ["trailer", id],
+      queryKey: ["movie", id],
       queryFn: () => api.get(`movie/${id}/videos`).then((res) => res.data),
     });
 
@@ -50,5 +57,6 @@ export const useMovie = () => {
     getActorDetail,
     getActorCredits,
     getMovieTrailer,
+    getBySearchs,
   };
 };

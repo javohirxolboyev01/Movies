@@ -20,7 +20,7 @@ const Genre: FC<Props> = ({ data }) => {
 
   return (
     <div className="container mx-auto px-4">
-      <div className="flex overflow-x-auto gap-3 py-4 scrollbar-thin scrollbar-thumb-gray-400">
+      <div className="genre-scroll flex overflow-x-auto gap-3 py-4">
         {data?.map((item: IGenre) => {
           const isActive = item.id.toString() === genre;
 
