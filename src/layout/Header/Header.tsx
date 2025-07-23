@@ -6,7 +6,7 @@ import { BsBookmark, BsMoon } from "react-icons/bs";
 import { GoHome } from "react-icons/go";
 import { RiMovie2Line } from "react-icons/ri";
 import { IoMdSearch } from "react-icons/io";
-import { jwtDecode } from "jwt-decode";
+
 
 const navItems = [
   { to: "/", icon: <GoHome className="text-xl" />, label: "Home" },
@@ -20,9 +20,7 @@ const navItems = [
 ];
 
 const Header = () => {
-  const credential = localStorage.getItem("credential");
-  const decoded: any = jwtDecode(credential || "");
-  console.log(decoded);
+
 
   const navigate = useNavigate();
   const [isDark, setIsDark] = useState(() => {
@@ -119,7 +117,7 @@ const Header = () => {
           )}
           <span>{isDark ? "Light" : "Dark"}</span>
         </button>
-        <h2>{decoded?.name}</h2>
+      
       </div>
     </>
   );
