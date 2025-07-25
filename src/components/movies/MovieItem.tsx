@@ -7,7 +7,7 @@ import { toggleWishlist } from "../redux/feature/wishlistSlice";
 import type { RootState } from "../redux";
 import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import { MdStars } from "react-icons/md";
-
+import AhadQayum from "@/assets/no_Pic/ahadqayum.jpg";
 interface Props {
   movie: IMovie;
 }
@@ -31,7 +31,7 @@ const MovieItem: React.FC<Props> = ({ movie }) => {
     >
       <div className="relative w-full aspect-[2/3] overflow-hidden">
         <img
-          src={IMAGE_URL + movie.poster_path}
+          src={movie?.poster_path ? IMAGE_URL + movie.poster_path : AhadQayum}
           alt={movie.title}
           loading="lazy"
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"

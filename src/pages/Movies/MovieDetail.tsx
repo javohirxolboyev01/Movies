@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useMovie } from "@/api/hook/useMovies";
 import { IMAGE_URL } from "@/const";
 import MovieView from "@/components/movies/MovieView";
+
+import noPicture from "@/assets/Logo/Logo.png";
 import { Image } from "antd";
 
 const MovieDetail = () => {
@@ -26,9 +28,11 @@ const MovieDetail = () => {
     <div className="bg-white text-white dark:bg-[#0d1117] dark:text-white min-h-screen">
       <div className="relative w-full h-[70vh] md:h-[80vh] overflow-hidden">
         <img
-          src={IMAGE_URL + data.backdrop_path}
+          src={data?.backdrop_path ? IMAGE_URL + data.backdrop_path : noPicture}
           alt="Backdrop"
-          className="w-full h-full object-cover brightness-[.35]"
+          className={`object-cover ${
+            data?.backdrop_path ? "w-full h-full" : "w-150 h-58 mx-auto"
+          } brightness-[.35]`}
         />
         <div className="absolute inset-0 flex items-end md:items-center justify-center md:justify-start px-6 md:px-16 pb-10 md:pb-0">
           <div className="text-center md:text-left text-white max-w-2xl space-y-4">
